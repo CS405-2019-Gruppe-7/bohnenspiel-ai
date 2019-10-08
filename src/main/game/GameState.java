@@ -13,7 +13,7 @@ public class GameState {
     public void play(int field){
         field = field - 1;
         if(!validMove(field)){
-            throw new RuntimeException("Move: " + field + " is not valid for player " + moveOfPlayer);
+            throw new RuntimeException("Move to field: " + field + " is not valid for player " + moveOfPlayer);
         }
         int startField = field;
         int value = board[field];
@@ -42,7 +42,7 @@ public class GameState {
     }
 
     private boolean validMove(int field){
-        return field >= 6*moveOfPlayer && field <= 6*moveOfPlayer + 6;
+        return field >= 6*moveOfPlayer && field <= 6*moveOfPlayer + 6 && this.board[field] != 0;
     }
 
     public GameState copy(){
