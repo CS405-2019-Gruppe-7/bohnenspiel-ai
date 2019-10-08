@@ -1,0 +1,14 @@
+package ai;
+
+public class MiniMaxAI extends AI {
+	
+	public int getMove(int enemyIndex) {
+		return 0;
+	}
+
+	@Override
+	public String getName() {
+		return "MiniMax";
+	}
+	
+}
