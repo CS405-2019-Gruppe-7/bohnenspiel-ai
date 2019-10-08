@@ -1,26 +1,21 @@
 package ai;
 
+import game.GameState;
+
 import java.util.Random;
 
 public class RandomAI extends AI {
-
+	GameState gs = new GameState();
 	Random rand = new Random();
 	
 	public int getMove(int enemyIndex) {
-		int index = 0;
-		// have to choose the first move
-		if (enemyIndex == -1) {
-			
-			index = rand.nextInt(6) + 1;
+		if(enemyIndex != -1){
+			gs.play(enemyIndex);
 		}
-		// enemy acted and i have to react
-		else if (enemyIndex > 0 && enemyIndex <= 6) {
-			index = rand.nextInt(6) + 7;
-		}
-		else if (enemyIndex > 6 && enemyIndex <= 12) {
-			index = rand.nextInt(6) + 1;
-		}
-		return index;
+		int[] possibleMoves = gs.getValidMoves().toArray();
+		int move = possibleMoves[rand.nextInt(possibleMoves.length)];
+		this.gs.play(move);
+		return move;
 	}
 
 	@Override
