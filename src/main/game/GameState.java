@@ -9,7 +9,40 @@ public class GameState {
     public int moveOfPlayer = 0;
     public int lastMove = -1;
     private boolean over = false;
-
+    private static int getHeuristik(int[] state,int[] score){
+        int points=0;
+        boolean p1=false;
+        boolean p2=false;
+        for(int i=0;i<=5;i++){
+            if(state[i]>0){
+                points++;
+                p1=true;
+            }
+            if(state[6+i]>0){
+                points--;
+                p2=true;
+            }
+        }
+        if(!p1){
+            points=0;
+            for(int i=0;i<=11;i++){
+                points-=state[i];
+            }
+            if(points+score[1]>score[0]){
+                points=-100;
+            }
+        }
+        if(!p2){
+            points=0;
+            for(int i=0;i<=11;i++){
+                points+=state[i];
+            }
+            if(points+score[0]>state[1]){
+                points=100;
+            }
+        }
+        return score[0]-score[1]+points;
+    }
     public void play(int field){
         if(!validMove(field)){
             System.out.println("Move not possible:");
