@@ -29,7 +29,7 @@ public class GameState {
 
         if(board[field] == 2 || board[field] == 4 || board[field] == 6) {
             do {
-                scores[startField/6] += board[field];
+                scores[moveOfPlayer] += board[field];
                 board[field] = 0;
                 field = (field == 0) ? field = 11 : --field;
             } while(board[field] == 2 || board[field] == 4 || board[field] == 6);
@@ -47,7 +47,11 @@ public class GameState {
 
     // is 1 <= field <= 12 && field isnt empty
     public boolean validMove(int field){
-        return field >= 6*moveOfPlayer && field <= 6*moveOfPlayer + 6 && this.board[field - 1] != 0;
+        return field > 6*moveOfPlayer && field <= 6*moveOfPlayer + 6 && this.board[field - 1] != 0;
+    }
+
+    public int getWinner(){
+        return this.scores[0] > this.scores[1] ? 0 : 1;
     }
 
     public IntStream getValidMoves(){

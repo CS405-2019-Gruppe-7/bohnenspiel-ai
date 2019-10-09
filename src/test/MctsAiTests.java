@@ -5,6 +5,8 @@ import game.GameState;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
+
 public class MctsAiTests {
     @Ignore
     @Test
@@ -29,8 +31,8 @@ public class MctsAiTests {
     public void testVsRandomAI(){
         int[] wins = new int[2];
         System.out.println("Starting test run MCTS vs RandomAI");
-        for(int i = 0; i < 10; i++){
-            System.out.println("Round "+i+"/10");
+        for(int i = 0; i < 100; i++){
+            System.out.println("Round "+i+"/100");
             AI[] players = {new MCTSAI(), new RandomAI()};
             GameState gs = new GameState();
             int moveOf = 0;
@@ -48,5 +50,30 @@ public class MctsAiTests {
             wins[winner]++;
         }
         System.out.println(String.format("MCTS vs RandomAI: %d:%d", wins[0], wins[1]));
+        assertTrue(wins[0] > 10*wins[1]);
+    }
+
+    @Ignore
+    @Test
+    public void testVsRandomAIRev(){
+        int[] wins = new int[2];
+        System.out.println("Starting test run RandomAI vs MCTS");
+        for(int i = 0; i < 100; i++){
+            System.out.println("Round "+i+"/100");
+            AI[] players = {new RandomAI(), new MCTSAI()};
+            GameState gs = new GameState();
+            int moveOf = 0;
+            int opponentMove = -1;
+            while(!gs.isGameOver()){
+                int move = players[moveOf].getMove(opponentMove);
+                opponentMove = move;
+                gs.play(move);
+                moveOf = moveOf == 0 ? 1 : 0;
+            }
+            int winner = gs.scores[0] > gs.scores[1] ? 0 : 1;
+            System.out.println(String.format("Player %d won!", winner));
+            wins[winner]++;
+        }
+        System.out.println(String.format("RandomAI vs MCTS: %d:%d", wins[0], wins[1]));
     }
 }

@@ -23,7 +23,11 @@ public class MCTSAI extends AI {
 
     @Override
     public int getMove(int enemyIndex) {
-        playingAs = playingAs == -1 && enemyIndex == -1 ? 0 : 1;
+        if(playingAs == -1 && enemyIndex == -1){
+            playingAs = 0;
+        }else if(playingAs == -1){
+            playingAs = 1;
+        }
         if(enemyIndex != -1){
             try{
                 rootNode = rootNode.getChildren().stream().filter(c -> c.getState().lastMove == enemyIndex).findFirst().get();
@@ -34,7 +38,7 @@ public class MCTSAI extends AI {
             }
         }
 
-        for(int i = 0; i < 10000; i++){
+        for(int i = 0; i < 1000; i++){
             // select leaf node by Upper Confidence Bound
             Node promisingNode = selectPromisingNode(rootNode);
 
@@ -77,7 +81,7 @@ public class MCTSAI extends AI {
             if(gs.isGameOver()){
                 int opponent = playingAs == 1 ? 0 : 1;
                 // if this AI wins, return 1, else 0
-                return gs.scores[playingAs] > gs.scores[opponent] ? 1 : 0;
+                return gs.getWinner() == playingAs ? 1 : 0;
             }
 
             int move = rng.nextInt(12) + 1;
