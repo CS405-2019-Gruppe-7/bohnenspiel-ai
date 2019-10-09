@@ -5,7 +5,7 @@ import game.GameState;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractNode {
+public class AbstractNode {
   private GameState state;
   private AbstractNode parent;
   private List<AbstractNode> children = null;
@@ -19,12 +19,12 @@ public abstract class AbstractNode {
     // lazy initialization of children
     if(children == null){
       this.children = new ArrayList<>();
-      /*this.state.getValidMoves().forEach(move -> {
+      this.state.getValidMoves().forEach(move -> {
         GameState gs = this.state.copy();
         gs.play(move);
-        Node n = new Node(this, gs);
+        AbstractNode n = new AbstractNode(this, gs);
         this.children.add(n);
-      });*/
+      });
     }
     return children;
   }
