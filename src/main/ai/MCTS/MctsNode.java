@@ -5,33 +5,33 @@ import game.GameState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
+public class MctsNode {
     private GameState state;
     private int visitCount = 0;
     private int winScore = 0;
-    private Node parent;
-    private List<Node> children = null;
+    private MctsNode parent;
+    private List<MctsNode> children = null;
 
-    public Node(Node parent, GameState gs){
+    public MctsNode(MctsNode parent, GameState gs){
         this.state = gs;
         this.parent = parent;
     }
 
-    public List<Node> getChildren() {
+    public List<MctsNode> getChildren() {
         // lazy initialization of children
         if(children == null){
             this.children = new ArrayList<>();
             this.state.getValidMoves().forEach(move -> {
                 GameState gs = this.state.copy();
                 gs.play(move);
-                Node n = new Node(this, gs);
+                MctsNode n = new MctsNode(this, gs);
                 this.children.add(n);
             });
         }
         return children;
     }
 
-    public void setChildren(List<Node> children){
+    public void setChildren(List<MctsNode> children){
         this.children = children;
     }
 
@@ -39,11 +39,11 @@ public class Node {
         return state;
     }
 
-    public Node getParent() {
+    public MctsNode getParent() {
         return parent;
     }
 
-    public void setParent(Node parent) {
+    public void setParent(MctsNode parent) {
         this.parent = parent;
     }
 

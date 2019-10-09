@@ -1,19 +1,19 @@
 package ai;
 
-import ai.MCTS.Node;
+import ai.MCTS.MctsNode;
 import game.GameState;
 
 import java.util.*;
 
 public class MCTSAI extends AI {
 
-    private Node rootNode;
+    private MctsNode rootNode;
     private double C = 1.5;
     private Random rng = new Random();
     private int playingAs = -1;
 
     public MCTSAI(){
-        rootNode = new Node(null, new GameState());
+        rootNode = new MctsNode(null, new GameState());
     }
 
     @Override
@@ -41,12 +41,12 @@ public class MCTSAI extends AI {
 
         for(int i = 0; i < 10000; i++){
             // select leaf node by Upper Confidence Bound
-            Node promisingNode = selectPromisingNode(rootNode);
+            MctsNode promisingNode = selectPromisingNode(rootNode);
 
             if(!promisingNode.getState().isGameOver()){
                 promisingNode.getChildren();
             }
-            Node nodeToExplore = promisingNode;
+            MctsNode nodeToExplore = promisingNode;
             if(nodeToExplore.getChildren().size() != 0){
                 // select random child of the best UTC node
                 nodeToExplore = promisingNode.getChildren().get(rng.nextInt(promisingNode.getChildren().size()));
@@ -62,8 +62,8 @@ public class MCTSAI extends AI {
         return rootNode.getState().lastMove;
     }
 
-    private void propagateBack(Node exploredNode, int result){
-        Node n = exploredNode;
+    private void propagateBack(MctsNode exploredNode, int result){
+        MctsNode n = exploredNode;
         while(n != null){
             n.setVisitCount(n.getVisitCount() + 1);
             n.setWinScore(n.getWinScore() + result);
@@ -71,8 +71,8 @@ public class MCTSAI extends AI {
         }
     }
 
-    private Node selectPromisingNode(Node from){
-        Node n = from;
+    private MctsNode selectPromisingNode(MctsNode from){
+        MctsNode n = from;
         while(!n.isLeaf() && n.getChildren().size() > 0){
             n = Collections.max(n.getChildren(), Comparator.comparing(this::getNodeUtc));
         }
@@ -99,12 +99,12 @@ public class MCTSAI extends AI {
 
 
 
-    private Node getMaxScoringChild(Node n){
+    private MctsNode getMaxScoringChild(MctsNode n){
         if(n.isLeaf()){
             return n;
         }
-        Node best = n.getChildren().get(0);
-        for(Node child: n.getChildren()){
+        MctsNode best = n.getChildren().get(0);
+        for(MctsNode child: n.getChildren()){
             if(
                     best.getWinScore() / (double)best.getVisitCount() <
                     child.getWinScore() / (double)child.getVisitCount()
@@ -123,7 +123,7 @@ public class MCTSAI extends AI {
         return best;
     }
 
-    private double getNodeUtc(Node n){
+    private double getNodeUtc(MctsNode n){
         if(n.getVisitCount() == 0){
             return Double.MAX_VALUE;
         }
