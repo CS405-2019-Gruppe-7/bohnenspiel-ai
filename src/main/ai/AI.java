@@ -76,17 +76,23 @@ public abstract class AI {
 			for(int i=0;i<=11;i++){
 				points-=state[i];
 			}
+			if(points+state[13]>state[12]){
+			  points=-100;
+      }
 		}
 		if(!p2){
 			points=0;
 			for(int i=0;i<=11;i++){
 				points+=state[i];
 			}
+      if(points+state[12]>state[13]){
+        points=100;
+      }
 		}
 		return state[12]-state[13]+points;
 	}
 	public static void main(String[] args){
-		int[] state={0,0,0,0,0,0,0,0,5,0,0,0,0,0};
+		int[] state={0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 		//int[] newstate=getState(state,10);
 
 		System.out.println(""+getHeuristik(state));
