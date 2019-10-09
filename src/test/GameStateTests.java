@@ -73,4 +73,17 @@ public class GameStateTests{
         gs.play(10);
         gs.play(10);
     }
+
+    @Test
+    public void correctGameOverCollection(){
+        GameState gs = new GameState();
+        gs.board = new byte[]{ 0, 0, 0, 0, 0, 1, 5, 2, 5, 5, 5, 5 };
+        gs.play(6);
+        gs.play(8);
+        System.out.println(gs.toString());
+        assertEquals(6, gs.scores[0]);
+        assertEquals(22, gs.scores[1]);
+        assertEquals(1, gs.getWinner());
+    }
+
 }

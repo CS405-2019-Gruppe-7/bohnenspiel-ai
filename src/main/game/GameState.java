@@ -7,14 +7,17 @@ public class GameState {
     public int[] scores = { 0, 0 };
     public byte[] board = { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 };
     public int moveOfPlayer = 0;
-
+    public int lastMove = -1;
     private boolean over = false;
 
     public void play(int field){
-        field = field - 1;
         if(!validMove(field)){
+            System.out.println("Move not possible:");
+            System.out.println(this.toString());
             throw new RuntimeException("Move to field: " + field + " is not valid for player " + moveOfPlayer);
         }
+        lastMove = field;
+        field = field - 1;
         int startField = field;
         int value = board[field];
         board[field] = 0;
@@ -26,7 +29,7 @@ public class GameState {
 
         if(board[field] == 2 || board[field] == 4 || board[field] == 6) {
             do {
-                scores[startField/6] += board[field];
+                scores[moveOfPlayer] += board[field];
                 board[field] = 0;
                 field = (field == 0) ? field = 11 : --field;
             } while(board[field] == 2 || board[field] == 4 || board[field] == 6);
@@ -37,12 +40,22 @@ public class GameState {
             int winner = moveOfPlayer == 0 ? 1 : 0;
             for(int i = 0; i < 6; i++){
                 scores[winner] += this.board[i+6*winner];
+                this.board[i+6*winner] = 0;
             }
         }
     }
 
-    private boolean validMove(int field){
-        return field >= 6*moveOfPlayer && field <= 6*moveOfPlayer + 6 && this.board[field] != 0;
+    // is 1 <= field <= 12 && field isnt empty
+    public boolean validMove(int field){
+        return field > 6*moveOfPlayer && field <= 6*moveOfPlayer + 6 && this.board[field - 1] != 0;
+    }
+
+    public int getWinner(){
+        return this.scores[0] > this.scores[1] ? 0 : 1;
+    }
+
+    public IntStream getValidMoves(){
+        return IntStream.range(1, 13).filter(this::validMove);
     }
 
     public GameState copy(){

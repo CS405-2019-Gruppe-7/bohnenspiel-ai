@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 
 import ai.AI;
+import ai.MCTSAI;
 
 /** Ausser an der markierten Stelle soll an dieser Klasse nichts veraendert werden. */
 public class GameClient {
@@ -16,7 +17,7 @@ public class GameClient {
 
 	public GameClient() {
 		//TODO Hier Instanz eurer AI erzeugen.
-		this.ai = new ai.RandomAI();
+		this.ai = new MCTSAI();
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -27,7 +28,7 @@ public class GameClient {
 			System.out.println("Name: " + client.ai.getName());
 			InputStreamReader isr = new InputStreamReader(System.in);
 			BufferedReader br = new BufferedReader(isr);
-			System.out.print("Spielnummer eingeben (0 für neues Spiel): ");
+			System.out.print("Spielnummer eingeben (0 fï¿½r neues Spiel): ");
 			String eingabe = br.readLine();
 			int playMode = Integer.parseInt(eingabe);
 
@@ -109,7 +110,12 @@ public class GameClient {
 	}
 
 	private void makeOwnMove(int enemyMove) throws Exception {
+		if(enemyMove != -1){
+			int enemyIsP = enemyMove > 6 ? 2 : 1;
+			System.out.println(String.format("-> P%d move: %d\n", enemyIsP, enemyMove));
+		}
 		int selectedField = this.ai.getMove(enemyMove);
+		System.out.println(String.format("-> P%d move: %d\n", selectedField > 6 ? 2 : 1 , selectedField));
 		move(selectedField);
 	}
 
