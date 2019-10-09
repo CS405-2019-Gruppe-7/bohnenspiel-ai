@@ -28,7 +28,7 @@ public class GameClient {
 			System.out.println("Name: " + client.ai.getName());
 			InputStreamReader isr = new InputStreamReader(System.in);
 			BufferedReader br = new BufferedReader(isr);
-			System.out.print("Spielnummer eingeben (0 f�r neues Spiel): ");
+			System.out.print("Spielnummer eingeben (0 fuer neues Spiel): ");
 			String eingabe = br.readLine();
 			int playMode = Integer.parseInt(eingabe);
 
