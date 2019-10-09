@@ -2,12 +2,13 @@ package local;
 
 import ai.AI;
 import ai.MCTSAI;
+import ai.MinMaxAI;
 import ai.RandomAI;
 import game.GameState;
 
 public class Tester {
     public static void main(String[] args){
-        AI[] players = {new RandomAI(), new MCTSAI()};
+        AI[] players = {new RandomAI(), new MinMaxAI()};
         GameState gs = new GameState();
         int moveOf = 0;
         int opponentMove = -1;

@@ -66,4 +66,8 @@ public class MinMaxNode {
     public void setBeta(int beta) {
         this.beta = beta;
     }
+
+    public int getHeuristic(){
+        return 0;
+    }
 }

@@ -21,29 +21,38 @@ public class MinMaxAI extends AI
         }else if(playingAs == -1){
             playingAs = 1;
         }
+        if(enemyIndex != -1){
+            try{
+                rootNode = rootNode.getChildren().stream().filter(c -> c.getState().lastMove == enemyIndex).findFirst().get();
+            }catch (Exception e){
+                System.out.println("Invalid opponent move:");
+                System.out.println("Opponent("+ (rootNode.getState().moveOfPlayer == 0 ? 1 : 0) +") move:" + enemyIndex);
+                throw e;
+            }
+        }
+        int maxHeuristic = minimax(0, rootNode, playingAs == this.state.moveOfPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
+        MinMaxNode nextMove = rootNode.getChildren().stream().filter(c -> c.getHeuristic() == maxHeuristic).findFirst().get();
 
-
-
-        return 0;
+        return nextMove.getState().lastMove;
     }
 
-    private int minimax(int depth, int nodeIndex,
+    private int minimax(int depth, MinMaxNode node,
                         Boolean maximizingPlayer,
-                        int values[], int alpha,
-                        int beta) {
+                        int alpha, int beta) {
         // Terminating condition. i.e
         // leaf node is reached
         if (depth == 3)
-            return values[nodeIndex];
+            // get the node heuristic here
+            return 0;
 
         if (maximizingPlayer) {
             int best = Integer.MIN_VALUE;
 
             // Recur for left and
             // right children
-            for (int i = 0; i < 2; i++) {
-                int val = minimax(depth + 1, nodeIndex * 2 + i,
-                        false, values, alpha, beta);
+            for (MinMaxNode child: node.getChildren()) {
+                int val = minimax(depth + 1, child,
+                        false, alpha, beta);
                 best = Math.max(best, val);
                 alpha = Math.max(alpha, best);
 
@@ -57,10 +66,10 @@ public class MinMaxAI extends AI
 
             // Recur for left and
             // right children
-            for (int i = 0; i < 2; i++) {
+            for (MinMaxNode child: node.getChildren()) {
 
-                int val = minimax(depth + 1, nodeIndex * 2 + i,
-                        true, values, alpha, beta);
+                int val = minimax(depth + 1, child,
+                        true, alpha, beta);
                 best = Math.min(best, val);
                 beta = Math.min(beta, best);
 
