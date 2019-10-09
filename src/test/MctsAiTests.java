@@ -20,10 +20,34 @@ public class MctsAiTests {
     @Test
     public void testRandomPlay(){
         MCTSAI ai = new MCTSAI();
-        ai.getMove(-1);
+        ai.setPlayingAs(0);
         GameState gs = new GameState();
         int result = ai.randomPlay(gs);
         System.out.println("Random play result:" + result);
+    }
+
+    @Test
+    public void lostGame(){
+        int playingAs = 1;
+        MCTSAI ai = new MCTSAI();
+        GameState gs = new GameState();
+        gs.board = new byte[]{ 1, 1, 4, 1, 5, 18, 3, 0, 0, 0, 0, 1 };
+        gs.scores[0] = 6;
+        gs.scores[1] = 32;
+
+        gs.moveOfPlayer = 0;
+        gs.play(3);
+        gs.play(12);
+
+        ai.setPlayingAs(playingAs);
+
+        int wins[] = new int[2];
+        for(int i = 0; i < 10000; i++){
+            int result = ai.randomPlay(gs.copy());
+            wins[result]++;
+        }
+        System.out.println(String.format("%d/%d=%f", wins[playingAs], wins[0]+wins[1], wins[playingAs]/(double)(wins[1] + wins[0])));
+        assertTrue(wins[0] > wins[1]);
     }
 
 //    @Ignore
@@ -53,7 +77,7 @@ public class MctsAiTests {
         assertTrue(wins[0] > 10*wins[1]);
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void testVsRandomAIRev(){
         int[] wins = new int[2];
@@ -76,4 +100,5 @@ public class MctsAiTests {
         }
         System.out.println(String.format("RandomAI vs MCTS: %d:%d", wins[0], wins[1]));
     }
+
 }

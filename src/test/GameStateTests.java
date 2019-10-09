@@ -85,4 +85,5 @@ public class GameStateTests{
         assertEquals(22, gs.scores[1]);
         assertEquals(1, gs.getWinner());
     }
+
 }

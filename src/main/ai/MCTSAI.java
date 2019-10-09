@@ -37,8 +37,9 @@ public class MCTSAI extends AI {
                 throw e;
             }
         }
+        System.out.println(this.rootNode.getState());
 
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 10000; i++){
             // select leaf node by Upper Confidence Bound
             Node promisingNode = selectPromisingNode(rootNode);
 
@@ -51,11 +52,13 @@ public class MCTSAI extends AI {
                 nodeToExplore = promisingNode.getChildren().get(rng.nextInt(promisingNode.getChildren().size()));
             }
             int randomPlayResult = randomPlay(nodeToExplore.getState().copy());
-            propagateBack(nodeToExplore, randomPlayResult);
+            int backPropValue = randomPlayResult == playingAs ? 1 : 0;
+            propagateBack(nodeToExplore, backPropValue);
         }
         rootNode = getMaxScoringChild(rootNode);
 //        System.out.println("After MCTS move: ("+rootNode.getState().lastMove + ")");
 //        System.out.println(rootNode.getState().toString());
+        System.out.println(this.rootNode.getState());
         return rootNode.getState().lastMove;
     }
 
@@ -79,9 +82,7 @@ public class MCTSAI extends AI {
     public int randomPlay(GameState gs){
         for(int i = 0; i < 1000; i++){
             if(gs.isGameOver()){
-                int opponent = playingAs == 1 ? 0 : 1;
-                // if this AI wins, return 1, else 0
-                return gs.getWinner() == playingAs ? 1 : 0;
+                return gs.getWinner();
             }
 
             int move = rng.nextInt(12) + 1;
@@ -111,7 +112,14 @@ public class MCTSAI extends AI {
                 best = child;
             }
         }
-//        System.out.println(String.format("The best node has score: %d/%d=%f", best.getWinScore(), best.getVisitCount(), best.getWinScore()/(double)best.getVisitCount()));
+        System.out.println(String.format(
+                "The best node has score: %d/%d=%f for p%d",
+                best.getWinScore(),
+                best.getVisitCount(),
+                best.getWinScore()/(double)best.getVisitCount(),
+                playingAs + 1
+                ));
+        System.out.println(best.getState().toString());
         return best;
     }
 
@@ -124,5 +132,9 @@ public class MCTSAI extends AI {
                         Math.log(n.getParent().getVisitCount()) /
                                 (double) n.getVisitCount()
                 );
+    }
+
+    public void setPlayingAs(int playingAs){
+        this.playingAs = playingAs;
     }
 }

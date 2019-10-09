@@ -7,7 +7,7 @@ import game.GameState;
 
 public class Tester {
     public static void main(String[] args){
-        AI[] players = {new MCTSAI(), new RandomAI()};
+        AI[] players = {new RandomAI(), new MCTSAI()};
         GameState gs = new GameState();
         int moveOf = 0;
         int opponentMove = -1;
@@ -19,7 +19,7 @@ public class Tester {
             System.out.println(gs.toString());
             moveOf = moveOf == 0 ? 1 : 0;
         }
-        int winner = gs.scores[0] > gs.scores[1] ? 1 : 2;
+        int winner = gs.getWinner() + 1;
         System.out.println(String.format("Player %d won!", winner));
     }
 }
