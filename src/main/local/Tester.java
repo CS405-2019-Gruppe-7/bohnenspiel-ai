@@ -12,6 +12,7 @@ public class Tester {
         GameState gs = new GameState();
         int moveOf = 0;
         int opponentMove = -1;
+        System.out.println(gs.toString());
         while(!gs.isGameOver()){
             int move = players[moveOf].getMove(opponentMove);
             System.out.println(String.format("-> P%d move: %d\n", moveOf+1, move));

@@ -9,40 +9,7 @@ public class GameState {
     public int moveOfPlayer = 0;
     public int lastMove = -1;
     private boolean over = false;
-    private static int getHeuristik(int[] state,int[] score){
-        int points=0;
-        boolean p1=false;
-        boolean p2=false;
-        for(int i=0;i<=5;i++){
-            if(state[i]>0){
-                points++;
-                p1=true;
-            }
-            if(state[6+i]>0){
-                points--;
-                p2=true;
-            }
-        }
-        if(!p1){
-            points=0;
-            for(int i=0;i<=11;i++){
-                points-=state[i];
-            }
-            if(points+score[1]>score[0]){
-                points=-100;
-            }
-        }
-        if(!p2){
-            points=0;
-            for(int i=0;i<=11;i++){
-                points+=state[i];
-            }
-            if(points+score[0]>state[1]){
-                points=100;
-            }
-        }
-        return score[0]-score[1]+points;
-    }
+
     public void play(int field){
         if(!validMove(field)){
             System.out.println("Move not possible:");
@@ -132,5 +99,42 @@ public class GameState {
         sb.append("\n");
         sb.append(header);
         return sb.toString();
+    }
+
+    private int h = 0;
+    public int getHeuristicValue(){
+        int points=0;
+        boolean p1=false;
+        boolean p2=false;
+        for(int i=0;i<=5;i++){
+            if(this.board[i]>0){
+                points++;
+                p1=true;
+            }
+            if(this.board[6+i]>0){
+                points--;
+                p2=true;
+            }
+        }
+        if(!p1){
+            points=0;
+            for(int i=0;i<=11;i++){
+                points-=this.board[i];
+            }
+            if(points+this.board[1]>this.board[0]){
+                points=-100;
+            }
+        }
+        if(!p2){
+            points=0;
+            for(int i=0;i<=11;i++){
+                points+=this.board[i];
+            }
+            if(points+this.board[0]>this.board[1]){
+                points=100;
+            }
+        }
+        h = this.board[0]-this.board[1]+points;
+        return this.board[0]-this.board[1]+points;
     }
 }

@@ -7,8 +7,7 @@ import java.util.List;
 
 public class MinMaxNode {
     private GameState state;
-    private int alpha = 0;
-    private int beta = 0;
+    private int value = 0;
     private MinMaxNode parent;
     private List<MinMaxNode> children = null;
 
@@ -51,23 +50,11 @@ public class MinMaxNode {
         return children == null;
     }
 
-    public int getAlpha() {
-        return alpha;
+    public int getValue() {
+        return value;
     }
 
-    public void setAlpha(int alpha) {
-        this.alpha = alpha;
-    }
-
-    public int getBeta() {
-        return beta;
-    }
-
-    public void setBeta(int beta) {
-        this.beta = beta;
-    }
-
-    public int getHeuristic(){
-        return 0;
+    public void setValue(int value) {
+        this.value = value;
     }
 }

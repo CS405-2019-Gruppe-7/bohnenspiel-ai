@@ -31,8 +31,12 @@ public class MinMaxAI extends AI
             }
         }
         int maxHeuristic = minimax(0, rootNode, playingAs == this.state.moveOfPlayer, Integer.MIN_VALUE,Integer.MAX_VALUE);
-        MinMaxNode nextMove = rootNode.getChildren().stream().filter(c -> c.getHeuristic() == maxHeuristic).findFirst().get();
-
+        MinMaxNode nextMove = rootNode.getChildren()
+                .stream()
+                .filter(
+                        c -> c.getValue() == maxHeuristic
+                ).findFirst().get();
+        rootNode = nextMove;
         return nextMove.getState().lastMove;
     }
 
@@ -41,25 +45,26 @@ public class MinMaxAI extends AI
                         int alpha, int beta) {
         // Terminating condition. i.e
         // leaf node is reached
-        if (depth == 3)
+        if (depth == 4)
             // get the node heuristic here
-            return 0;
+            return node.getState().getHeuristicValue();
 
         if (maximizingPlayer) {
             int best = Integer.MIN_VALUE;
-
             // Recur for left and
             // right children
             for (MinMaxNode child: node.getChildren()) {
                 int val = minimax(depth + 1, child,
                         false, alpha, beta);
                 best = Math.max(best, val);
+                child.setValue(val);
                 alpha = Math.max(alpha, best);
 
                 // Alpha Beta Pruning
                 if (beta <= alpha)
                     break;
             }
+            node.setValue(best);
             return best;
         } else {
             int best = Integer.MAX_VALUE;
@@ -71,12 +76,14 @@ public class MinMaxAI extends AI
                 int val = minimax(depth + 1, child,
                         true, alpha, beta);
                 best = Math.min(best, val);
+                child.setValue(val);
                 beta = Math.min(beta, best);
 
                 // Alpha Beta Pruning
                 if (beta <= alpha)
                     break;
             }
+            node.setValue(best);
             return best;
         }
     }
