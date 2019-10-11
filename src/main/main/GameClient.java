@@ -34,6 +34,7 @@ public class GameClient {
 			InputStreamReader isr = new InputStreamReader(System.in);
 			BufferedReader br = new BufferedReader(isr);
 			System.out.print("Spielnummer eingeben (0 fuer neues Spiel): ");
+			System.out.flush();
 			String eingabe = br.readLine();
 			int playMode = Integer.parseInt(eingabe);
 
