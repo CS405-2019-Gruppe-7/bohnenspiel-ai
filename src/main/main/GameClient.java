@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 
 import ai.AI;
-import ai.MCTSAI;
 import ai.MinMaxAI;
 import game.GameState;
 
