@@ -8,7 +8,7 @@ public class MinMaxAI extends AI
     private GameState state = new GameState();
     private int playingAs = -1;
     private MinMaxNode rootNode = new MinMaxNode(null, state);
-
+    private int maxDepth = 8;
     @Override
     public String getName() {
         return "MinMaxv1";
@@ -45,7 +45,7 @@ public class MinMaxAI extends AI
                         int alpha, int beta) {
         // Terminating condition. i.e
         // leaf node is reached
-        if (depth == 4)
+        if (depth == this.maxDepth)
             // get the node heuristic here
             return node.getState().getHeuristicValue();
 
@@ -86,5 +86,13 @@ public class MinMaxAI extends AI
             node.setValue(best);
             return best;
         }
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public void setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
     }
 }

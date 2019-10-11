@@ -6,6 +6,8 @@ import java.net.URI;
 
 import ai.AI;
 import ai.MCTSAI;
+import ai.MinMaxAI;
+import game.GameState;
 
 /** Ausser an der markierten Stelle soll an dieser Klasse nichts veraendert werden. */
 public class GameClient {
@@ -14,10 +16,14 @@ public class GameClient {
 	
 	private String gameID;
 	private AI ai;
+	private GameState gs = new GameState();
+	private boolean debug = false;
 
 	public GameClient() {
 		//TODO Hier Instanz eurer AI erzeugen.
-		this.ai = new MCTSAI();
+		this.ai = new MinMaxAI();
+		((MinMaxAI)this.ai).setMaxDepth(10);
+		this.debug = true;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -84,7 +90,6 @@ public class GameClient {
 			start = 1;
 			end = 6;
 		}
-
 		while (true) {
 			int moveState = Integer.parseInt(load(checkURL));
 			int stateID = Integer.parseInt(load(stateIdURL));
@@ -112,10 +117,18 @@ public class GameClient {
 	private void makeOwnMove(int enemyMove) throws Exception {
 		if(enemyMove != -1){
 			int enemyIsP = enemyMove > 6 ? 2 : 1;
-			System.out.println(String.format("-> P%d move: %d\n", enemyIsP, enemyMove));
+			if(this.debug) {
+				System.out.println(String.format("-> P%d move: %d\n", enemyIsP, enemyMove));
+				gs.play(enemyMove);
+				System.out.println(this.gs.toString());
+			}
 		}
 		int selectedField = this.ai.getMove(enemyMove);
-		System.out.println(String.format("-> P%d move: %d\n", selectedField > 6 ? 2 : 1 , selectedField));
+		if(this.debug) {
+			System.out.println(String.format("-> P%d move: %d\n", selectedField > 6 ? 2 : 1 , selectedField));
+			gs.play(selectedField);
+			System.out.println(this.gs.toString());
+		}
 		move(selectedField);
 	}
 
