@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-    mainClassName = 'local.Tester'
+    mainClassName = 'main.GameClient'
 }
 
 jar {
